@@ -31,6 +31,15 @@
     <input type="submit" value="Kirjaudu" />
   </form>
   {% endif %}
+  <h1>
+    Arvostelut
+  </h1>
+    <ul>
+     {% for item in items %}
+     <li><a href="/review/{{ item.id }}">{{ item.title }}</a> </li>
+     {%endfor%}
+    </ul>
+
 </body>
 
 </html>
