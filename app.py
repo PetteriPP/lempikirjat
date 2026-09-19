@@ -33,7 +33,32 @@ def create_book_review():
     items.add_review(title, author, description, rating, user_id)
     return redirect("/")
 
+@app.route("/edit_review/<int:review_id>")
+def edit_review(review_id):
+    review = items.show_review(review_id)
 
+    if review["user_id"] != session["user_id"]:
+        return "Sinulla ei ole oikeuksia muokata arvostelua"
+    return render_template("edit_review.html", item=review)
+
+@app.route("/update_review", methods=["POST"])
+def update_review():
+
+    review_id = request.form["review_id"]
+
+    review = items.show_review(review_id)
+
+    if review["user_id"] != session["user_id"]:
+        return "Sinulla ei ole oikeuksia muokata arvostelua"
+    
+    title = request.form["book_name"]
+    author = request.form["author_name"]
+    description = request.form["description"]
+    rating = request.form["rating"]
+
+    items.update_review(review_id, title, author, description, rating) 
+
+    return redirect("/review/" + str(review_id))
 
 @app.route("/register")
 def register():
