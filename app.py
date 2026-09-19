@@ -60,6 +60,23 @@ def update_review():
 
     return redirect("/review/" + str(review_id))
 
+@app.route("/delete_review/<int:review_id>", methods=["GET", "POST"])
+def delete_review(review_id):
+
+    review = items.show_review(review_id)
+    if review["user_id"] != session["user_id"]:
+        return "Sinulla ei ole oikeuksia poistaa arvostelua"
+
+    if request.method == "GET":
+        return render_template("delete_review.html", item=review)
+
+    if request.method == "POST":
+        if "delete" in request.form:
+            items.delete_review(review_id)
+            return redirect("/")
+        else:
+            return redirect("/review/"+ str(review_id))
+
 @app.route("/register")
 def register():
     return render_template("register.html")
