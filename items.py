@@ -33,3 +33,14 @@ def update_review(review_id, title, author, description, rating):
 def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"
     db.execute(sql, [review_id])
+
+def search_reviews(query):
+    sql = """SELECT *
+             FROM reviews
+             WHERE title LIKE ?
+             OR author LIKE ?
+             OR description LIKE ?
+             OR rating LIKE ?
+             ORDER BY id DESC"""
+    search = "%" + query + "%"
+    return db.query(sql, [search, search, search, query])

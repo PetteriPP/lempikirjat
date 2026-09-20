@@ -12,6 +12,8 @@
     <a href="/delete_review/{{ item.id }}">Poista</a>
     <a href="/">Takaisin</a>
   </p>
+  {% else %}
+    <a href="/">Takaisin</a>
   {% endif %}
   <h1>Kirja: {{ item.title }}</h1>
   <h2>Kirjailija: {{ item.author }}</h2>
