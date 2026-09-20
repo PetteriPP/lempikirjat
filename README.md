@@ -7,3 +7,27 @@
 *  Sovelluksessa on käyttäjäsivut, jotka näyttävät käyttäjän lisäämät kirja-arviot sekä tilastoja, kuten lisättyjen kirja-arvioiden määrän.
 *  Kirjoille on valittavissa useampia luokitteluja. Luokittelujen vaihtoehdot määritellään tietokannassa. Kirjalle voidaan valita esimerkiksi yksi tai useampi genre sekä yksi tai useampi teema.
 * Käyttäjä pystyy lisäämään kommentteja omiin ja muiden käyttäjien kirja-arvioihin.
+
+Ohjeet sovelluksen käynnistämiseen:
+
+- Kloonaa repositorio omalle koneellesi:
+
+  git clone https://github.com/PetteriPP/lempikirjat
+  cd lempikirjat
+
+- Luo virtuaaliympäristö ja aktivoi se:
+
+  python3 -m venv venv
+  source venv/bin/activate
+
+- Asenna Flask:
+
+  pip install flask
+
+- Luo tietokanta
+
+  sqlite3 database.db < schema.sql
+
+- Käynnistä sovellus:
+
+  flask run
