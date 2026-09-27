@@ -1,29 +1,22 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Rekisteröinti</title>
-</head>
+{% block title %}Rekisteröinti{% endblock %}
 
-<body>
-  {% include "messages.html" %}
-  <h1>Luo tili palveluun</h1>
-  <form action="/create" method="post">
-    <p>
-      <label for="username">Tunnus:</label> <br />
-      <input id="username" type="text" name="username" value="{{ username | default('') }}" required maxlength="{{ limits.username }}" />
-    </p>
-    <p>
-      <label for="password1">Salasana:</label> <br />
-      <input id="password1" type="password" name="password1" required maxlength="{{ limits.password }}" />
-    </p>
-    <p>
-      <label for="password2">Salasana uudestaan:</label> <br />
-      <input id="password2" type="password" name="password2" required maxlength="{{ limits.password }}" />
-    </p>
-    <input type="submit" value="Luo tunnus" />
-  </form>
-  <p><a href="/">Takaisin etusivulle</a></p>
-</body>
-
-</html>
+{% block content %}
+<h2>Luo tili palveluun</h2>
+<form action="/create" method="post">
+  <p>
+    <label for="username">Tunnus:</label> <br />
+    <input id="username" type="text" name="username" value="{{ username | default('') }}" required maxlength="{{ limits.username }}" />
+  </p>
+  <p>
+    <label for="password1">Salasana:</label> <br />
+    <input id="password1" type="password" name="password1" required maxlength="{{ limits.password }}" />
+  </p>
+  <p>
+    <label for="password2">Salasana uudestaan:</label> <br />
+    <input id="password2" type="password" name="password2" required maxlength="{{ limits.password }}" />
+  </p>
+  <input type="submit" value="Luo tunnus" />
+</form>
+{% endblock %}

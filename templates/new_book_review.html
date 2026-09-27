@@ -1,33 +1,26 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Uusi kirja-arvostelu</title>
-</head>
+{% block title %}Uusi kirja-arvostelu{% endblock %}
 
-<body>
-  {% include "messages.html" %}
-  <h1>Luo uusi arvostelu</h1>
-  <form action="/create_book_review" method="post">
-    <p>
-      <label for="book_name">Kirjan nimi:</label> <br />
-      <input id="book_name" type="text" name="book_name" value="{{ review.title }}" required maxlength="{{ limits.title }}" />
-    </p>
-    <p>
-        <label for="author_name">Kirjailijan nimi:</label> <br />
-        <input id="author_name" type="text" name="author_name" value="{{ review.author }}" required maxlength="{{ limits.author }}" />
-    </p>
-    <p>
-      <label for="description">Arvostelu:</label> <br />
-      <textarea id="description" name="description" rows="8" cols="25" required maxlength="{{ limits.description }}">{{ review.description }}</textarea>
-    </p>
-    <p>
-      <label for="rating">Arvosana 1-10:</label> <br />
-      <input id="rating" type="number" name="rating" value="{{ review.rating }}" required min="1" max="10" step="1" />
-    </p>
-    <input type="submit" value="Lähetä" />
-  </form>
-  <p><a href="/">Takaisin etusivulle</a></p>
-</body>
-
-</html>
+{% block content %}
+<h2>Luo uusi arvostelu</h2>
+<form action="/create_book_review" method="post">
+  <p>
+    <label for="book_name">Kirjan nimi:</label> <br />
+    <input id="book_name" type="text" name="book_name" value="{{ review.title }}" required maxlength="{{ limits.title }}" />
+  </p>
+  <p>
+      <label for="author_name">Kirjailijan nimi:</label> <br />
+      <input id="author_name" type="text" name="author_name" value="{{ review.author }}" required maxlength="{{ limits.author }}" />
+  </p>
+  <p>
+    <label for="description">Arvostelu:</label> <br />
+    <textarea id="description" name="description" rows="8" cols="25" required maxlength="{{ limits.description }}">{{ review.description }}</textarea>
+  </p>
+  <p>
+    <label for="rating">Arvosana 1-10:</label> <br />
+    <input id="rating" type="number" name="rating" value="{{ review.rating }}" required min="1" max="10" step="1" />
+  </p>
+  <input type="submit" value="Lähetä" />
+</form>
+{% endblock %}

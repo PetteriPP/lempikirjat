@@ -1,38 +1,24 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Lempikirjat</title>
-</head>
+{% block title %}Etusivu{% endblock %}
 
-<body>
-  {% include "messages.html" %}
-  <h1>Lempikirjat</h1>
-  {% if session.username %}
+{% block content %}
+{% if not session.user_id %}
+<h2 id="login">Kirjaudu sisään</h2>
+<form action="/login" method="post">
   <p>
-    Olet kirjautunut nimellä {{ session.username }}
+    <label for="username">Tunnus:</label> <br />
+    <input id="username" type="text" name="username" value="{{ username | default('') }}" required maxlength="{{ limits.username }}" />
   </p>
   <p>
-  <a href="/new_book_review">Luo kirja-arvostelu</a>
+    <label for="password">Salasana:</label> <br />
+    <input id="password" type="password" name="password" required maxlength="{{ limits.password }}" />
   </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-  <a href="/register">Luo tili</a>
-  <form action="/login" method="post">
-    <p>
-      <label for="username">Tunnus:</label> <br />
-      <input id="username" type="text" name="username" value="{{ username | default('') }}" required maxlength="{{ limits.username }}" />
-    </p>
-    <p>
-      <label for="password">Salasana:</label> <br />
-      <input id="password" type="password" name="password" required maxlength="{{ limits.password }}" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
-  {% endif %}
-  <h2>Arvostelut</h2>
+  <input type="submit" value="Kirjaudu" />
+</form>
+{% endif %}
+
+<h2>Arvostelut</h2>
 <form action="/" method="get">
   <p>
     <label for="query">Hakusana:</label>
@@ -40,12 +26,9 @@
     <input type="submit" value="Hae" />
   </p>
 </form>
-    <ul>
-     {% for review in reviews %}
-     <li><a href="/review/{{ review.id }}">{{ review.title }}</a> </li>
-     {%endfor%}
-    </ul>
-
-</body>
-
-</html>
+<ul>
+  {% for review in reviews %}
+  <li><a href="/review/{{ review.id }}">{{ review.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

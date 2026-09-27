@@ -1,34 +1,28 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Muokkaa arvostelua</title>
-</head>
+{% block title %}Muokkaa arvostelua{% endblock %}
 
-<body>
-  {% include "messages.html" %}
-  <h1>Muokkaa arvostelua</h1>
-  <form action="/update_review" method="post">
-    <p>
-      <label for="book_name">Kirjan nimi:</label> <br />
-      <input id="book_name" type="text" name="book_name" value="{{ review.title }}" required maxlength="{{ limits.title }}" />
-    </p>
-    <p>
-        <label for="author_name">Kirjailijan nimi:</label> <br />
-        <input id="author_name" type="text" name="author_name" value="{{ review.author }}" required maxlength="{{ limits.author }}" />
-    </p>
-    <p>
-      <label for="description">Arvostelu:</label> <br />
-      <textarea id="description" name="description" rows="8" cols="25" required maxlength="{{ limits.description }}">{{ review.description }}</textarea>
-    </p>
-    <p>
-      <label for="rating">Arvosana 1-10:</label> <br />
-      <input id="rating" type="number" name="rating" value="{{ review.rating }}" required min="1" max="10" step="1" />
-    </p>
-    <input type="hidden" name="review_id" value="{{ review.id }}" />
-    <input type="submit" value="Päivitä" />
-    <a href="/review/{{ review.id }}">Peru</a>
-  </form>
-</body>
-
-</html>
+{% block content %}
+<h2>Muokkaa arvostelua</h2>
+<form action="/update_review" method="post">
+  <p>
+    <label for="book_name">Kirjan nimi:</label> <br />
+    <input id="book_name" type="text" name="book_name" value="{{ review.title }}" required maxlength="{{ limits.title }}" />
+  </p>
+  <p>
+      <label for="author_name">Kirjailijan nimi:</label> <br />
+      <input id="author_name" type="text" name="author_name" value="{{ review.author }}" required maxlength="{{ limits.author }}" />
+  </p>
+  <p>
+    <label for="description">Arvostelu:</label> <br />
+    <textarea id="description" name="description" rows="8" cols="25" required maxlength="{{ limits.description }}">{{ review.description }}</textarea>
+  </p>
+  <p>
+    <label for="rating">Arvosana 1-10:</label> <br />
+    <input id="rating" type="number" name="rating" value="{{ review.rating }}" required min="1" max="10" step="1" />
+  </p>
+  <input type="hidden" name="review_id" value="{{ review.id }}" />
+  <input type="submit" value="Päivitä" />
+  <a href="/review/{{ review.id }}">Peru</a>
+</form>
+{% endblock %}

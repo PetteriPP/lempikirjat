@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{% endblock %} – Lempikirjat</title>
+</head>
+
+<body>
+  <header>
+    <h1>Lempikirjat</h1>
+    {% if session.user_id %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    {% endif %}
+  </header>
+
+  <nav aria-label="Päänavigaatio">
+    <ul>
+      {% if request.endpoint != "index" %}
+      <li><a href="/">Etusivu</a></li>
+      {% endif %}
+      {% if session.user_id %}
+      <li><a href="/new_book_review">Luo kirja-arvostelu</a></li>
+      <li><a href="/logout">Kirjaudu ulos</a></li>
+      {% else %}
+      <li><a href="/register">Luo tili</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <main>
+    {% include "messages.html" %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+
+</html>

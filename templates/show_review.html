@@ -1,28 +1,18 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ review.title }}</title>
-</head>
+{% block title %}{{ review.title }}{% endblock %}
 
-<body>
-    {% if session.user_id == review.user_id %}
-  <p>
-    <a href="/edit_review/{{ review.id }}">Muokkaa</a>
-    <a href="/delete_review/{{ review.id }}">Poista</a>
-    <a href="/">Takaisin</a>
-  </p>
-  {% else %}
-    <a href="/">Takaisin</a>
-  {% endif %}
-  <h1>Kirja: {{ review.title }}</h1>
-  <h2>Kirjailija: {{ review.author }}</h2>
-  <p></p>
-  <h3>Arvostelu:</h3>
-  <p>{{ review.description }}</p>
-  <h4>Arvosana: {{ review.rating }}</h4>
-
-  <p>Arvostelun kirjoittaja: {{ review.username }}</p>
-</body>
-
-</html>
+{% block content %}
+<h2>Kirja: {{ review.title }}</h2>
+{% if session.user_id == review.user_id %}
+<p>
+  <a href="/edit_review/{{ review.id }}">Muokkaa</a>
+  <a href="/delete_review/{{ review.id }}">Poista</a>
+</p>
+{% endif %}
+<p>Kirjailija: {{ review.author }}</p>
+<h3>Arvostelu:</h3>
+<p>{{ review.description }}</p>
+<p>Arvosana: {{ review.rating }}</p>
+<p>Arvostelun kirjoittaja: {{ review.username }}</p>
+{% endblock %}
