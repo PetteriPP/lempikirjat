@@ -45,3 +45,11 @@ def search_reviews(query):
              ORDER BY id DESC"""
     search = "%" + query + "%"
     return db.query(sql, [search, search, search, query])
+
+
+def get_user_reviews(user_id):
+    sql = """SELECT id, title
+             FROM reviews
+             WHERE user_id = ?
+             ORDER BY id DESC"""
+    return db.query(sql, [user_id])

@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
 import reviews
+import users
 import validation
 
 app = Flask(__name__)
@@ -70,6 +71,17 @@ def index():
     else:
         review_list = reviews.get_reviews()
     return render_template("index.html", reviews=review_list, query=query)
+
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    if not 1 <= user_id <= validation.MAX_ID:
+        abort(404, description="Käyttäjää ei löytynyt.")
+    user = users.get_user(user_id)
+    if user is None:
+        abort(404, description="Käyttäjää ei löytynyt.")
+    review_list = reviews.get_user_reviews(user_id)
+    return render_template("user.html", user=user, reviews=review_list)
 
 
 @app.route("/review/<int:review_id>")

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}Käyttäjän {{ user.username }} profiili{% endblock %}
+
+{% block content %}
+<h2>Käyttäjän {{ user.username }} profiili</h2>
+<p>Kirja-arvosteluja: {{ user.review_count }}</p>
+{% if reviews %}
+<h3>Kirja-arvostelut</h3>
+<ul>
+  {% for review in reviews %}
+  <li><a href="/review/{{ review.id }}">{{ review.title }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Käyttäjä ei ole vielä lisännyt kirja-arvosteluja.</p>
+{% endif %}
+{% endblock %}
