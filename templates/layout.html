@@ -22,6 +22,7 @@
       <li><a href="/">Etusivu</a></li>
       {% endif %}
       {% if session.user_id %}
+      <li><a href="/user/{{ session.user_id }}">Oma profiili</a></li>
       <li><a href="/new_book_review">Luo kirja-arvostelu</a></li>
       <li>
         <form action="/logout" method="post">
