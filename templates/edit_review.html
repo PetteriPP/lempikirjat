@@ -5,6 +5,7 @@
 {% block content %}
 <h2>Muokkaa arvostelua</h2>
 <form action="/update_review" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <p>
     <label for="book_name">Kirjan nimi:</label> <br />
     <input id="book_name" type="text" name="book_name" value="{{ review.title }}" required maxlength="{{ limits.title }}" />

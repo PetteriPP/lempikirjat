@@ -1,3 +1,4 @@
+import secrets
 import sqlite3
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
@@ -17,6 +18,19 @@ app.jinja_env.globals["limits"] = {
     "password": validation.PASSWORD_MAX,
     "query": validation.QUERY_MAX,
 }
+
+
+@app.before_request
+def ensure_csrf_token():
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
+
+
+def check_csrf():
+    token = request.form.get("csrf_token")
+    if not token or token != session.get("csrf_token"):
+        abort(403, description="Lomakkeen lähetys epäonnistui. "
+              "Palaa lomakkeelle, päivitä sivu ja yritä uudelleen.")
 
 
 def require_login():
@@ -72,6 +86,7 @@ def new_book_review():
 
 @app.route("/create_book_review", methods=["POST"])
 def create_book_review():
+    check_csrf()
     require_login()
     review, errors = validation.review_form(request.form)
     if errors:
@@ -94,6 +109,7 @@ def edit_review(review_id):
 
 @app.route("/update_review", methods=["POST"])
 def update_review():
+    check_csrf()
     require_login()
     original = get_review(request.form.get("review_id"))
     require_owner(original)
@@ -111,6 +127,8 @@ def update_review():
 
 @app.route("/delete_review/<int:review_id>", methods=["GET", "POST"])
 def delete_review(review_id):
+    if request.method == "POST":
+        check_csrf()
     require_login()
     review = get_review(review_id)
     require_owner(review)
@@ -133,6 +151,7 @@ def register():
 
 @app.route("/create", methods=["POST"])
 def create():
+    check_csrf()
     username, password, errors = validation.registration(request.form)
     if errors:
         for error in errors:
@@ -151,6 +170,7 @@ def create():
 
 @app.route("/login", methods=["POST"])
 def login():
+    check_csrf()
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
     valid_input = (0 < len(username) <= validation.USERNAME_MAX
@@ -164,12 +184,14 @@ def login():
         flash("Väärä käyttäjänimi tai salasana.")
         return render_template("index.html", reviews=reviews.get_reviews(),
                                query="", username=username), 400
+    session["csrf_token"] = secrets.token_hex(16)
     session["user_id"] = result[0]["id"]
     session["username"] = username
     return redirect("/")
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 def logout():
+    check_csrf()
     session.clear()
     return redirect("/")

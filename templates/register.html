@@ -5,6 +5,7 @@
 {% block content %}
 <h2>Luo tili palveluun</h2>
 <form action="/create" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <p>
     <label for="username">Tunnus:</label> <br />
     <input id="username" type="text" name="username" value="{{ username | default('') }}" required maxlength="{{ limits.username }}" />
