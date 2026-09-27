@@ -7,9 +7,9 @@
 
 <body>
   <h1>Poista arvostelu</h1>
-  <p> Arvostelu: {{ item.title }} </p>
+  <p> Arvostelu: {{ review.title }} </p>
   <p>Haluatko varmasti poistaa arvostelun?</p>
-  <form action="/delete_review/{{ item.id }}" method="post">
+  <form action="/delete_review/{{ review.id }}" method="post">
     <input type="submit" name="delete" value="Kyllä">
     <input type="submit" name="cancel" value="Ei">
   </form >

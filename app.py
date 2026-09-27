@@ -4,7 +4,7 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
-import items
+import reviews
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -14,16 +14,16 @@ def index():
     query = request.args.get("query")
 
     if query:
-        reviews = items.search_reviews(query)
+        review_list = reviews.search_reviews(query)
     else:
-        reviews = items.get_reviews()
+        review_list = reviews.get_reviews()
 
-    return render_template("index.html", items=reviews, query=query)
+    return render_template("index.html", reviews=review_list, query=query)
 
 @app.route("/review/<int:review_id>")
 def show_review(review_id):
-    review = items.show_review(review_id)
-    return render_template ("show_review.html", item=review)
+    review = reviews.show_review(review_id)
+    return render_template ("show_review.html", review=review)
 
 @app.route("/new_book_review")
 def new_book_review():
@@ -36,23 +36,23 @@ def create_book_review():
     description = request.form["description"]
     rating = request.form["rating"]
     user_id = session["user_id"]
-    items.add_review(title, author, description, rating, user_id)
+    reviews.add_review(title, author, description, rating, user_id)
     return redirect("/")
 
 @app.route("/edit_review/<int:review_id>")
 def edit_review(review_id):
-    review = items.show_review(review_id)
+    review = reviews.show_review(review_id)
 
     if review["user_id"] != session["user_id"]:
         return "Sinulla ei ole oikeuksia muokata arvostelua"
-    return render_template("edit_review.html", item=review)
+    return render_template("edit_review.html", review=review)
 
 @app.route("/update_review", methods=["POST"])
 def update_review():
 
     review_id = request.form["review_id"]
 
-    review = items.show_review(review_id)
+    review = reviews.show_review(review_id)
 
     if review["user_id"] != session["user_id"]:
         return "Sinulla ei ole oikeuksia muokata arvostelua"
@@ -62,23 +62,23 @@ def update_review():
     description = request.form["description"]
     rating = request.form["rating"]
 
-    items.update_review(review_id, title, author, description, rating) 
+    reviews.update_review(review_id, title, author, description, rating)
 
     return redirect("/review/" + str(review_id))
 
 @app.route("/delete_review/<int:review_id>", methods=["GET", "POST"])
 def delete_review(review_id):
 
-    review = items.show_review(review_id)
+    review = reviews.show_review(review_id)
     if review["user_id"] != session["user_id"]:
         return "Sinulla ei ole oikeuksia poistaa arvostelua"
 
     if request.method == "GET":
-        return render_template("delete_review.html", item=review)
+        return render_template("delete_review.html", review=review)
 
     if request.method == "POST":
         if "delete" in request.form:
-            items.delete_review(review_id)
+            reviews.delete_review(review_id)
             return redirect("/")
         else:
             return redirect("/review/"+ str(review_id))

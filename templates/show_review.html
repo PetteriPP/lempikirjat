@@ -2,27 +2,27 @@
 <html>
 
 <head>
-  <title>{{ item.title }}</title>
+  <title>{{ review.title }}</title>
 </head>
 
 <body>
-    {% if session.user_id == item.user_id %}
+    {% if session.user_id == review.user_id %}
   <p>
-    <a href="/edit_review/{{ item.id }}">Muokkaa</a>
-    <a href="/delete_review/{{ item.id }}">Poista</a>
+    <a href="/edit_review/{{ review.id }}">Muokkaa</a>
+    <a href="/delete_review/{{ review.id }}">Poista</a>
     <a href="/">Takaisin</a>
   </p>
   {% else %}
     <a href="/">Takaisin</a>
   {% endif %}
-  <h1>Kirja: {{ item.title }}</h1>
-  <h2>Kirjailija: {{ item.author }}</h2>
+  <h1>Kirja: {{ review.title }}</h1>
+  <h2>Kirjailija: {{ review.author }}</h2>
   <p></p>
   <h3>Arvostelu:</h3>
-  <p>{{ item.description }}</p>
-  <h4>Arvosana: {{ item.rating }}</h4>
+  <p>{{ review.description }}</p>
+  <h4>Arvosana: {{ review.rating }}</h4>
 
-  <p>Arvostelun kirjoittaja: {{ item.username }}</p>
+  <p>Arvostelun kirjoittaja: {{ review.username }}</p>
 </body>
 
 </html>

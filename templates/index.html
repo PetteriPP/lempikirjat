@@ -42,8 +42,8 @@
 </form>
   </h1>
     <ul>
-     {% for item in items %}
-     <li><a href="/review/{{ item.id }}">{{ item.title }}</a> </li>
+     {% for review in reviews %}
+     <li><a href="/review/{{ review.id }}">{{ review.title }}</a> </li>
      {%endfor%}
     </ul>
 
