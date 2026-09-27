@@ -122,6 +122,7 @@ def delete_review(review_id):
         flash("Vahvista arvostelun poistaminen tai peruuta.")
         return render_template("delete_review.html", review=review), 400
     reviews.delete_review(review_id)
+    flash("Kirja-arvostelu poistettu.")
     return redirect("/")
 
 
