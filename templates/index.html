@@ -6,6 +6,7 @@
 </head>
 
 <body>
+  {% include "messages.html" %}
   <h1>Lempikirjat</h1>
   {% if session.username %}
   <p>
@@ -21,26 +22,24 @@
   <a href="/register">Luo tili</a>
   <form action="/login" method="post">
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
+      <label for="username">Tunnus:</label> <br />
+      <input id="username" type="text" name="username" value="{{ username | default('') }}" required maxlength="{{ limits.username }}" />
     </p>
     <p>
-      Salasana: <br />
-      <input type="password" name="password" />
+      <label for="password">Salasana:</label> <br />
+      <input id="password" type="password" name="password" required maxlength="{{ limits.password }}" />
     </p>
     <input type="submit" value="Kirjaudu" />
   </form>
   {% endif %}
-  <h1>
-    Arvostelut
+  <h2>Arvostelut</h2>
 <form action="/" method="get">
   <p>
-    Hakusana:
-    <input type="text" name="query" />
+    <label for="query">Hakusana:</label>
+    <input id="query" type="text" name="query" value="{{ query }}" maxlength="{{ limits.query }}" />
     <input type="submit" value="Hae" />
   </p>
 </form>
-  </h1>
     <ul>
      {% for review in reviews %}
      <li><a href="/review/{{ review.id }}">{{ review.title }}</a> </li>
