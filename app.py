@@ -171,9 +171,15 @@ def create():
         return render_template("register.html", username=username), 400
     password_hash = generate_password_hash(password)
     try:
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
+        sql = """INSERT INTO users (username, password_hash)
+                 SELECT ?, ?
+                 WHERE NOT EXISTS (
+                     SELECT id FROM users WHERE casefold(username) = ?
+                 )"""
+        inserted_count = db.execute(sql, [username, password_hash, username.casefold()])
     except sqlite3.IntegrityError:
+        inserted_count = 0
+    if inserted_count == 0:
         flash("Käyttäjänimi on jo varattu. Valitse toinen käyttäjänimi.")
         return render_template("register.html", username=username), 400
     flash("Tunnus luotu. Voit nyt kirjautua sisään.")
@@ -190,15 +196,17 @@ def login():
                    and bool(password.strip()))
     result = []
     if valid_input:
-        sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])
+        sql = """SELECT id, username, password_hash
+                 FROM users
+                 WHERE casefold(username) = ?"""
+        result = db.query(sql, [username.casefold()])
     if not result or not check_password_hash(result[0]["password_hash"], password):
         flash("Väärä käyttäjänimi tai salasana.")
         return render_template("index.html", reviews=reviews.get_reviews(),
                                query="", username=username), 400
     session["csrf_token"] = secrets.token_hex(16)
     session["user_id"] = result[0]["id"]
-    session["username"] = username
+    session["username"] = result[0]["username"]
     return redirect("/")
 
 
