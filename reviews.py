@@ -5,7 +5,7 @@ def add_review(title, author, description, rating, user_id ):
     db.execute(sql, [title, author, description, rating, user_id])
 
 def get_reviews():
-    sql = "SELECT * FROM reviews"
+    sql = "SELECT id, title FROM reviews"
     return db.query(sql)
 
 def show_review(review_id):
@@ -36,7 +36,7 @@ def delete_review(review_id):
     db.execute(sql, [review_id])
 
 def search_reviews(query):
-    sql = """SELECT *
+    sql = """SELECT id, title
              FROM reviews
              WHERE title LIKE ?
              OR author LIKE ?
