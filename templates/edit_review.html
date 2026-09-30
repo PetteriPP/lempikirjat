@@ -22,6 +22,7 @@
     <label for="rating">Arvosana 1-10:</label> <br />
     <input id="rating" type="number" name="rating" value="{{ review.rating }}" required min="1" max="10" step="1" />
   </p>
+  {% include "class_fields.html" %}
   <input type="hidden" name="review_id" value="{{ review.id }}" />
   <input type="submit" value="Päivitä" />
   <a href="/review/{{ review.id }}">Peru</a>

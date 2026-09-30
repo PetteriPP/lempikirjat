@@ -1,0 +1,12 @@
+<p>Valitse vähintään yksi genre ja yksi teema. Voit valita useita vaihtoehtoja.</p>
+{% for kind, label in [("genre", "Genret"), ("theme", "Teemat")] %}
+<fieldset>
+  <legend>{{ label }}</legend>
+  {% for classification in classes if classification.kind == kind %}
+  <p>
+    <input id="class_{{ classification.id }}" type="checkbox" name="class_ids" value="{{ classification.id }}" {% if classification.id in review.class_ids %}checked{% endif %} />
+    <label for="class_{{ classification.id }}">{{ classification.name }}</label>
+  </p>
+  {% endfor %}
+</fieldset>
+{% endfor %}

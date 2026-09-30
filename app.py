@@ -87,27 +87,32 @@ def show_user(user_id):
 @app.route("/review/<int:review_id>")
 def show_review(review_id):
     review = get_review(review_id)
-    return render_template("show_review.html", review=review)
+    classes = reviews.get_review_classes(review_id)
+    return render_template("show_review.html", review=review, classes=classes)
 
 
 @app.route("/new_book_review")
 def new_book_review():
     require_login()
-    return render_template("new_book_review.html", review={})
+    classes = reviews.get_classes()
+    return render_template("new_book_review.html", review={"class_ids": []},
+                           classes=classes)
 
 
 @app.route("/create_book_review", methods=["POST"])
 def create_book_review():
     check_csrf()
     require_login()
-    review, errors = validation.review_form(request.form)
+    classes = reviews.get_classes()
+    review, errors = validation.review_form(request.form, classes)
     if errors:
         for error in errors:
             flash(error)
-        return render_template("new_book_review.html", review=review), 400
+        return render_template("new_book_review.html", review=review,
+                               classes=classes), 400
     reviews.add_review(review["title"].strip(), review["author"].strip(),
                        review["description"].strip(), int(review["rating"]),
-                       session["user_id"])
+                       session["user_id"], review["class_ids"])
     return redirect("/")
 
 
@@ -116,7 +121,11 @@ def edit_review(review_id):
     require_login()
     review = get_review(review_id)
     require_owner(review)
-    return render_template("edit_review.html", review=review)
+    review = dict(review)
+    review["class_ids"] = [classification["id"]
+                           for classification in reviews.get_review_classes(review_id)]
+    classes = reviews.get_classes()
+    return render_template("edit_review.html", review=review, classes=classes)
 
 
 @app.route("/update_review", methods=["POST"])
@@ -125,15 +134,17 @@ def update_review():
     require_login()
     original = get_review(request.form.get("review_id"))
     require_owner(original)
-    review, errors = validation.review_form(request.form)
+    classes = reviews.get_classes()
+    review, errors = validation.review_form(request.form, classes)
     if errors:
         for error in errors:
             flash(error)
         review["id"] = original["id"]
-        return render_template("edit_review.html", review=review), 400
+        return render_template("edit_review.html", review=review,
+                               classes=classes), 400
     reviews.update_review(original["id"], review["title"].strip(),
                           review["author"].strip(), review["description"].strip(),
-                          int(review["rating"]))
+                          int(review["rating"]), review["class_ids"])
     return redirect("/review/" + str(original["id"]))
 
 

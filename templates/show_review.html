@@ -14,6 +14,18 @@
 <h3>Arvostelu:</h3>
 <p>{{ review.description }}</p>
 <p>Arvosana: {{ review.rating }}</p>
+<h3>Luokittelu</h3>
+{% if classes %}
+{% for kind, label in [("genre", "Genret"), ("theme", "Teemat")] %}
+<p>{{ label }}:
+  {% for classification in classes if classification.kind == kind %}
+    {{ classification.name }}{% if not loop.last %}, {% endif %}
+  {% endfor %}
+</p>
+{% endfor %}
+{% else %}
+<p>Arvostelua ei ole vielä luokiteltu.</p>
+{% endif %}
 <p>
   Arvostelun kirjoittaja:
   <a href="/user/{{ review.user_id }}">{{ review.username }}</a>

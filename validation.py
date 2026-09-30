@@ -1,5 +1,3 @@
-"""Validate user input before storing it in the database."""
-
 TITLE_MAX = 200
 AUTHOR_MAX = 200
 DESCRIPTION_MAX = 5000
@@ -9,7 +7,7 @@ QUERY_MAX = 200
 MAX_ID = 2**63 - 1
 
 
-def review_form(form):
+def review_form(form, classes):
     review = {
         "title": form.get("book_name", ""),
         "author": form.get("author_name", ""),
@@ -30,6 +28,17 @@ def review_form(form):
     rating = review["rating"]
     if rating not in [str(number) for number in range(1, 11)]:
         errors.append("Arvosanan pitää olla kokonaisluku väliltä 1–10.")
+    selected_ids = {review_id(value) for value in form.getlist("class_ids")}
+    allowed_ids = {classification["id"] for classification in classes}
+    if not selected_ids <= allowed_ids:
+        errors.append("Luokitteluvalinta on virheellinen. Valitse luokat lomakkeelta.")
+    review["class_ids"] = sorted(selected_ids & allowed_ids)
+    selected_kinds = {classification["kind"] for classification in classes
+                      if classification["id"] in review["class_ids"]}
+    if "genre" not in selected_kinds:
+        errors.append("Valitse vähintään yksi genre.")
+    if "theme" not in selected_kinds:
+        errors.append("Valitse vähintään yksi teema.")
     return review, errors
 
 

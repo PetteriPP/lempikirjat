@@ -1,8 +1,32 @@
 import db
 
-def add_review(title, author, description, rating, user_id ):
-    sql = "INSERT INTO reviews (title, author, description, rating, user_id) VALUES (?, ?, ?, ?, ?)"
-    db.execute(sql, [title, author, description, rating, user_id])
+def get_classes():
+    sql = "SELECT id, kind, name FROM classes ORDER BY kind, name"
+    return db.query(sql)
+
+
+def get_review_classes(review_id):
+    sql = """SELECT classes.id, classes.kind, classes.name
+             FROM classes
+             JOIN review_classes ON review_classes.class_id = classes.id
+             WHERE review_classes.review_id = ?
+             ORDER BY classes.kind, classes.name"""
+    return db.query(sql, [review_id])
+
+
+def add_review(title, author, description, rating, user_id, class_ids):
+    con = db.get_connection()
+    try:
+        sql = """INSERT INTO reviews (title, author, description, rating, user_id)
+                 VALUES (?, ?, ?, ?, ?)"""
+        result = con.execute(sql, [title, author, description, rating, user_id])
+        review_id = result.lastrowid
+        sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
+        con.executemany(sql, [(review_id, class_id) for class_id in class_ids])
+        con.commit()
+        return review_id
+    finally:
+        con.close()
 
 def get_reviews():
     sql = "SELECT id, title FROM reviews"
@@ -23,13 +47,21 @@ def show_review(review_id):
     result = db.query(sql, [review_id])
     return result[0] if result else None
 
-def update_review(review_id, title, author, description, rating):
+def update_review(review_id, title, author, description, rating, class_ids):
     sql = """ UPDATE reviews SET title = ?,
                                  author = ?,
                                  description = ?,
                                  rating = ?
                             WHERE id = ?"""
-    db.execute(sql, [title, author, description, rating, review_id])
+    con = db.get_connection()
+    try:
+        con.execute(sql, [title, author, description, rating, review_id])
+        con.execute("DELETE FROM review_classes WHERE review_id = ?", [review_id])
+        sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
+        con.executemany(sql, [(review_id, class_id) for class_id in class_ids])
+        con.commit()
+    finally:
+        con.close()
 
 def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"
