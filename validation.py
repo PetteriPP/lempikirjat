@@ -1,6 +1,7 @@
 TITLE_MAX = 200
 AUTHOR_MAX = 200
 DESCRIPTION_MAX = 5000
+COMMENT_MAX = 2000
 USERNAME_MAX = 30
 PASSWORD_MAX = 128
 QUERY_MAX = 200
@@ -40,6 +41,16 @@ def review_form(form, classes):
     if "theme" not in selected_kinds:
         errors.append("Valitse vähintään yksi teema.")
     return review, errors
+
+
+def comment_form(form):
+    content = form.get("content", "")
+    errors = []
+    if not content.strip():
+        errors.append("Kommentti on pakollinen.")
+    elif len(content) > COMMENT_MAX:
+        errors.append(f"Kommentti saa sisältää enintään {COMMENT_MAX} merkkiä.")
+    return content, errors
 
 
 def registration(form):

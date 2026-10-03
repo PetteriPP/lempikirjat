@@ -4,6 +4,7 @@ from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
+import comments
 import db
 import reviews
 import users
@@ -15,6 +16,7 @@ app.jinja_env.globals["limits"] = {
     "title": validation.TITLE_MAX,
     "author": validation.AUTHOR_MAX,
     "description": validation.DESCRIPTION_MAX,
+    "comment": validation.COMMENT_MAX,
     "username": validation.USERNAME_MAX,
     "password": validation.PASSWORD_MAX,
     "query": validation.QUERY_MAX,
@@ -97,6 +99,23 @@ def new_book_review():
     classes = reviews.get_classes()
     return render_template("new_book_review.html", review={"class_ids": []},
                            classes=classes)
+
+
+@app.route("/create_comment", methods=["POST"])
+def create_comment():
+    check_csrf()
+    require_login()
+    review = get_review(request.form.get("review_id"))
+    content, errors = validation.comment_form(request.form)
+    if errors:
+        for error in errors:
+            flash(error)
+        classes = reviews.get_review_classes(review["id"])
+        return render_template("show_review.html", review=review, classes=classes,
+                               comment_content=content), 400
+    comments.add_comment(review["id"], session["user_id"], content.strip())
+    flash("Kommentti lisätty.")
+    return redirect("/review/" + str(review["id"]))
 
 
 @app.route("/create_book_review", methods=["POST"])

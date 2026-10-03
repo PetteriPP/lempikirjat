@@ -30,4 +30,19 @@
   Arvostelun kirjoittaja:
   <a href="/user/{{ review.user_id }}">{{ review.username }}</a>
 </p>
+<h3>Lisää kommentti</h3>
+{% if session.user_id %}
+<form action="/create_comment" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="hidden" name="review_id" value="{{ review.id }}" />
+  <p>
+    <label for="content">Kommentti (enintään {{ limits.comment }} merkkiä):</label> <br />
+    <textarea id="content" name="content" rows="5" cols="40" required
+              maxlength="{{ limits.comment }}">{{ comment_content | default('') }}</textarea>
+  </p>
+  <input type="submit" value="Lisää kommentti" />
+</form>
+{% else %}
+<p><a href="/#login">Kirjaudu sisään</a> lisätäksesi kommentin.</p>
+{% endif %}
 {% endblock %}
