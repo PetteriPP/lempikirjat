@@ -34,6 +34,7 @@ pip install flask
 
 ```bash
 sqlite3 database.db < schema.sql
+sqlite3 database.db < init.sql
 ```
 
 - Käynnistä sovellus:
@@ -41,3 +42,7 @@ sqlite3 database.db < schema.sql
 ```bash
 flask run
 ```
+
+## Sovelluksen testaaminen
+
+Sovellusta voi testata luomalla sovellukseen ainakin kaksi käyttäjätiliä. Sen jälkeen pystyy luomaan kirja-arvosteluja sekä kommentoimaan muiden käyttäjien kirja-arvosteluja. Kommenttien lisääminen kirja-arvosteluihin vaatii käyttäjätilin.
