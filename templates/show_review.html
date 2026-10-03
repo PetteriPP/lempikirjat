@@ -30,6 +30,20 @@
   Arvostelun kirjoittaja:
   <a href="/user/{{ review.user_id }}">{{ review.username }}</a>
 </p>
+<h3>Kommentit</h3>
+{% if comments %}
+{% for comment in comments %}
+<article>
+  <p>
+    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
+    <time datetime="{{ comment.sent_at | replace(' ', 'T') }}Z">{{ comment.sent_at }} UTC</time>
+  </p>
+  <p class="comment-content">{{ comment.content }}</p>
+</article>
+{% endfor %}
+{% else %}
+<p>Arvostelussa ei ole vielä kommentteja.</p>
+{% endif %}
 <h3>Lisää kommentti</h3>
 {% if session.user_id %}
 <form action="/create_comment" method="post">

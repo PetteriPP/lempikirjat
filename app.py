@@ -90,7 +90,9 @@ def show_user(user_id):
 def show_review(review_id):
     review = get_review(review_id)
     classes = reviews.get_review_classes(review_id)
-    return render_template("show_review.html", review=review, classes=classes)
+    comment_list = comments.get_comments(review["id"])
+    return render_template("show_review.html", review=review, classes=classes,
+                           comments=comment_list)
 
 
 @app.route("/new_book_review")
@@ -111,8 +113,9 @@ def create_comment():
         for error in errors:
             flash(error)
         classes = reviews.get_review_classes(review["id"])
+        comment_list = comments.get_comments(review["id"])
         return render_template("show_review.html", review=review, classes=classes,
-                               comment_content=content), 400
+                               comments=comment_list, comment_content=content), 400
     comments.add_comment(review["id"], session["user_id"], content.strip())
     flash("Kommentti lisätty.")
     return redirect("/review/" + str(review["id"]))

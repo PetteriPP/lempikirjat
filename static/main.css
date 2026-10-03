@@ -24,3 +24,8 @@ nav form {
 .link-button:active {
   color: ActiveText;
 }
+
+.comment-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
