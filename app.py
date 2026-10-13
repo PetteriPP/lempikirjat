@@ -1,11 +1,9 @@
 import secrets
-import sqlite3
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import comments
-import db
 import reviews
 import users
 import validation
@@ -203,16 +201,7 @@ def create():
             flash(error)
         return render_template("register.html", username=username), 400
     password_hash = generate_password_hash(password)
-    try:
-        sql = """INSERT INTO users (username, password_hash)
-                 SELECT ?, ?
-                 WHERE NOT EXISTS (
-                     SELECT id FROM users WHERE casefold(username) = ?
-                 )"""
-        inserted_count = db.execute(sql, [username, password_hash, username.casefold()])
-    except sqlite3.IntegrityError:
-        inserted_count = 0
-    if inserted_count == 0:
+    if not users.create_user(username, password_hash):
         flash("Käyttäjänimi on jo varattu. Valitse toinen käyttäjänimi.")
         return render_template("register.html", username=username), 400
     flash("Tunnus luotu. Voit nyt kirjautua sisään.")
@@ -227,19 +216,14 @@ def login():
     valid_input = (0 < len(username) <= validation.USERNAME_MAX
                    and 0 < len(password) <= validation.PASSWORD_MAX
                    and bool(password.strip()))
-    result = []
-    if valid_input:
-        sql = """SELECT id, username, password_hash
-                 FROM users
-                 WHERE casefold(username) = ?"""
-        result = db.query(sql, [username.casefold()])
-    if not result or not check_password_hash(result[0]["password_hash"], password):
+    user = users.get_user_by_username(username) if valid_input else None
+    if not user or not check_password_hash(user["password_hash"], password):
         flash("Väärä käyttäjänimi tai salasana.")
         return render_template("index.html", reviews=reviews.get_reviews(),
                                query="", username=username), 400
     session["csrf_token"] = secrets.token_hex(16)
-    session["user_id"] = result[0]["id"]
-    session["username"] = result[0]["username"]
+    session["user_id"] = user["id"]
+    session["username"] = user["username"]
     return redirect("/")
 
 
