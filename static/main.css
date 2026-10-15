@@ -208,6 +208,7 @@ nav a:hover,
   text-decoration: underline;
 }
 
+.review-content,
 .comment-content {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
