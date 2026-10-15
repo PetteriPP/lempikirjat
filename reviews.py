@@ -15,18 +15,11 @@ def get_review_classes(review_id):
 
 
 def add_review(title, author, description, rating, user_id, class_ids):
-    con = db.get_connection()
-    try:
-        sql = """INSERT INTO reviews (title, author, description, rating, user_id)
-                 VALUES (?, ?, ?, ?, ?)"""
-        result = con.execute(sql, [title, author, description, rating, user_id])
-        review_id = result.lastrowid
-        sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
-        con.executemany(sql, [(review_id, class_id) for class_id in class_ids])
-        con.commit()
-        return review_id
-    finally:
-        con.close()
+    sql = """INSERT INTO reviews (title, author, description, rating, user_id)
+             VALUES (?, ?, ?, ?, ?)"""
+    params = [title, author, description, rating, user_id]
+    link_sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
+    return db.insert_with_links(sql, params, link_sql, class_ids)
 
 def get_reviews():
     sql = "SELECT id, title FROM reviews"
@@ -53,15 +46,14 @@ def update_review(review_id, title, author, description, rating, class_ids):
                                  description = ?,
                                  rating = ?
                             WHERE id = ?"""
-    con = db.get_connection()
-    try:
-        con.execute(sql, [title, author, description, rating, review_id])
-        con.execute("DELETE FROM review_classes WHERE review_id = ?", [review_id])
-        sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
-        con.executemany(sql, [(review_id, class_id) for class_id in class_ids])
-        con.commit()
-    finally:
-        con.close()
+    commands = [
+        (sql, [title, author, description, rating, review_id]),
+        ("DELETE FROM review_classes WHERE review_id = ?", [review_id]),
+    ]
+    sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
+    for class_id in class_ids:
+        commands.append((sql, [review_id, class_id]))
+    db.execute_transaction(commands)
 
 def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"

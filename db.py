@@ -11,6 +11,7 @@ def get_connection():
     con.row_factory = sqlite3.Row
     return con
 
+
 def execute(sql, params=[]):
     con = get_connection()
     try:
@@ -18,6 +19,28 @@ def execute(sql, params=[]):
         con.commit()
         g.last_insert_id = result.lastrowid
         return result.rowcount
+    finally:
+        con.close()
+
+
+def insert_with_links(sql, params, link_sql, link_ids):
+    con = get_connection()
+    try:
+        result = con.execute(sql, params)
+        row_id = result.lastrowid
+        con.executemany(link_sql, [(row_id, link_id) for link_id in link_ids])
+        con.commit()
+        return row_id
+    finally:
+        con.close()
+
+
+def execute_transaction(commands):
+    con = get_connection()
+    try:
+        for sql, params in commands:
+            con.execute(sql, params)
+        con.commit()
     finally:
         con.close()
 
