@@ -45,8 +45,8 @@ def execute_transaction(commands):
         con.close()
 
 def last_insert_id():
-    return g.last_insert_id    
-    
+    return g.last_insert_id
+
 def query(sql, params=[]):
     con = get_connection()
     try:

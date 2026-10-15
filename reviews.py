@@ -26,7 +26,7 @@ def get_reviews():
     return db.query(sql)
 
 def show_review(review_id):
-    sql = """SELECT 
+    sql = """SELECT
                     reviews.id,
                     reviews.title,
                     reviews.author,
@@ -36,7 +36,7 @@ def show_review(review_id):
                     users.username
             FROM reviews, users
             WHERE reviews.user_id = users.id AND
-                reviews.id = ?""" 
+                reviews.id = ?"""
     result = db.query(sql, [review_id])
     return result[0] if result else None
 
