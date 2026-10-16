@@ -1,4 +1,5 @@
 import db
+import pagination
 
 def get_classes():
     sql = "SELECT id, kind, name FROM classes ORDER BY kind, name"
@@ -21,9 +22,23 @@ def add_review(title, author, description, rating, user_id, class_ids):
     link_sql = "INSERT INTO review_classes (review_id, class_id) VALUES (?, ?)"
     return db.insert_with_links(sql, params, link_sql, class_ids)
 
-def get_reviews():
-    sql = "SELECT id, title FROM reviews"
-    return db.query(sql)
+def get_reviews(page=1):
+    sql = """SELECT id, title FROM reviews
+             ORDER BY id DESC
+             LIMIT ? OFFSET ?"""
+    return db.query(sql, [pagination.PAGE_SIZE, (page - 1) * pagination.PAGE_SIZE])
+
+
+def count_reviews(query=""):
+    if not query:
+        return db.query("SELECT COUNT(*) FROM reviews")[0][0]
+    sql = """SELECT COUNT(*) FROM reviews
+             WHERE title LIKE ?
+             OR author LIKE ?
+             OR description LIKE ?
+             OR rating LIKE ?"""
+    search = "%" + query + "%"
+    return db.query(sql, [search, search, search, query])[0][0]
 
 def show_review(review_id):
     sql = """SELECT
@@ -59,21 +74,26 @@ def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"
     db.execute(sql, [review_id])
 
-def search_reviews(query):
+def search_reviews(query, page=1):
     sql = """SELECT id, title
              FROM reviews
              WHERE title LIKE ?
              OR author LIKE ?
              OR description LIKE ?
              OR rating LIKE ?
-             ORDER BY id DESC"""
+             ORDER BY id DESC
+             LIMIT ? OFFSET ?"""
     search = "%" + query + "%"
-    return db.query(sql, [search, search, search, query])
+    params = [search, search, search, query,
+              pagination.PAGE_SIZE, (page - 1) * pagination.PAGE_SIZE]
+    return db.query(sql, params)
 
 
-def get_user_reviews(user_id):
+def get_user_reviews(user_id, page=1):
     sql = """SELECT id, title
              FROM reviews
              WHERE user_id = ?
-             ORDER BY id DESC"""
-    return db.query(sql, [user_id])
+             ORDER BY id DESC
+             LIMIT ? OFFSET ?"""
+    params = [user_id, pagination.PAGE_SIZE, (page - 1) * pagination.PAGE_SIZE]
+    return db.query(sql, params)

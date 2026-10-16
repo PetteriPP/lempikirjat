@@ -30,7 +30,7 @@
   Arvostelun kirjoittaja:
   <a href="/user/{{ review.user_id }}">{{ review.username }}</a>
 </p>
-<h3>Kommentit</h3>
+<h3 id="comments">Kommentit</h3>
 {% if comments %}
 {% for comment in comments %}
 <article>
@@ -41,6 +41,7 @@
   <p class="comment-content">{{ comment.content }}</p>
 </article>
 {% endfor %}
+{% include "pagination.html" %}
 {% else %}
 <p>Arvostelussa ei ole vielä kommentteja.</p>
 {% endif %}
@@ -49,6 +50,7 @@
 <form action="/create_comment" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <input type="hidden" name="review_id" value="{{ review.id }}" />
+  <input type="hidden" name="page" value="{{ page }}" />
   <p>
     <label for="content">Kommentti (enintään {{ limits.comment }} merkkiä):</label> <br />
     <textarea id="content" name="content" rows="5" cols="40" required

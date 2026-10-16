@@ -12,6 +12,7 @@
   <li><a href="/review/{{ review.id }}">{{ review.title }}</a></li>
   {% endfor %}
 </ul>
+{% include "pagination.html" %}
 {% else %}
 <p>Käyttäjä ei ole vielä lisännyt kirja-arvosteluja.</p>
 {% endif %}

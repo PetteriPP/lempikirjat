@@ -4,6 +4,7 @@ from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import comments
+import pagination
 import reviews
 import users
 import validation
@@ -65,12 +66,16 @@ def index():
     query = request.args.get("query", "").strip()
     if len(query) > validation.QUERY_MAX:
         flash(f"Hakusana saa sisältää enintään {validation.QUERY_MAX} merkkiä.")
-        return render_template("index.html", reviews=[], query=query), 400
+        return render_template("index.html", reviews=[], query=query,
+                               page=1, page_count=1, page_path="/"), 400
+    review_count = reviews.count_reviews(query)
+    page, page_count = pagination.get_page(request.args.get("page", "1"), review_count)
     if query:
-        review_list = reviews.search_reviews(query)
+        review_list = reviews.search_reviews(query, page)
     else:
-        review_list = reviews.get_reviews()
-    return render_template("index.html", reviews=review_list, query=query)
+        review_list = reviews.get_reviews(page)
+    return render_template("index.html", reviews=review_list, query=query,
+                           page=page, page_count=page_count, page_path="/")
 
 
 @app.route("/user/<int:user_id>")
@@ -80,17 +85,24 @@ def show_user(user_id):
     user = users.get_user(user_id)
     if user is None:
         abort(404, description="Käyttäjää ei löytynyt.")
-    review_list = reviews.get_user_reviews(user_id)
-    return render_template("user.html", user=user, reviews=review_list)
+    page, page_count = pagination.get_page(request.args.get("page", "1"),
+                                          user["review_count"])
+    review_list = reviews.get_user_reviews(user_id, page)
+    return render_template("user.html", user=user, reviews=review_list,
+                           page=page, page_count=page_count,
+                           page_path="/user/" + str(user_id))
 
 
 @app.route("/review/<int:review_id>")
 def show_review(review_id):
     review = get_review(review_id)
     classes = reviews.get_review_classes(review_id)
-    comment_list = comments.get_comments(review["id"])
+    comment_count = comments.count_comments(review["id"])
+    page, page_count = pagination.get_page(request.args.get("page", "1"), comment_count)
+    comment_list = comments.get_comments(review["id"], page)
     return render_template("show_review.html", review=review, classes=classes,
-                           comments=comment_list)
+                           comments=comment_list, page=page, page_count=page_count,
+                           page_path="/review/" + str(review["id"]))
 
 
 @app.route("/new_book_review")
@@ -111,12 +123,19 @@ def create_comment():
         for error in errors:
             flash(error)
         classes = reviews.get_review_classes(review["id"])
-        comment_list = comments.get_comments(review["id"])
+        comment_count = comments.count_comments(review["id"])
+        page, page_count = pagination.get_page(request.form.get("page", "1"),
+                                              comment_count)
+        comment_list = comments.get_comments(review["id"], page)
         return render_template("show_review.html", review=review, classes=classes,
-                               comments=comment_list, comment_content=content), 400
+                               comments=comment_list, comment_content=content,
+                               page=page, page_count=page_count,
+                               page_path="/review/" + str(review["id"])), 400
     comments.add_comment(review["id"], session["user_id"], content.strip())
     flash("Kommentti lisätty.")
-    return redirect("/review/" + str(review["id"]))
+    _, page_count = pagination.get_page(1, comments.count_comments(review["id"]))
+    return redirect("/review/" + str(review["id"]) + "?page=" + str(page_count)
+                    + "#comments")
 
 
 @app.route("/create_book_review", methods=["POST"])
@@ -219,8 +238,10 @@ def login():
     user = users.get_user_by_username(username) if valid_input else None
     if not user or not check_password_hash(user["password_hash"], password):
         flash("Väärä käyttäjänimi tai salasana.")
+        _, page_count = pagination.get_page(1, reviews.count_reviews())
         return render_template("index.html", reviews=reviews.get_reviews(),
-                               query="", username=username), 400
+                               query="", username=username, page=1,
+                               page_count=page_count, page_path="/"), 400
     session["csrf_token"] = secrets.token_hex(16)
     session["user_id"] = user["id"]
     session["username"] = user["username"]

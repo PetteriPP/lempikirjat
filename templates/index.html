@@ -30,6 +30,9 @@
 <ul>
   {% for review in reviews %}
   <li><a href="/review/{{ review.id }}">{{ review.title }}</a></li>
+  {% else %}
+  <li>Arvosteluja ei löytynyt.</li>
   {% endfor %}
 </ul>
+{% include "pagination.html" %}
 {% endblock %}
