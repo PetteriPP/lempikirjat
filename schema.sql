@@ -33,3 +33,6 @@ CREATE TABLE IF NOT EXISTS comments (
     content TEXT NOT NULL,
     sent_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews (user_id);
+CREATE INDEX IF NOT EXISTS idx_comments_review_id ON comments (review_id);
