@@ -6,29 +6,30 @@
 ```text
 ************* Module app
 app.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app.py:25:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:30:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:37:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:42:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:52:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:59:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:64:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:77:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:88:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:26:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:31:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:38:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:43:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:53:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:60:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:65:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:82:0: C0116: Missing function or method docstring (missing-function-docstring)
 app.py:97:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:105:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:123:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:140:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:152:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:172:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:109:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:117:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:142:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:159:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:171:0: C0116: Missing function or method docstring (missing-function-docstring)
 app.py:191:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:196:0: C0116: Missing function or method docstring (missing-function-docstring)
-app.py:212:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:210:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:215:0: C0116: Missing function or method docstring (missing-function-docstring)
 app.py:231:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:252:0: C0116: Missing function or method docstring (missing-function-docstring)
 ************* Module comments
 comments.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-comments.py:4:0: C0116: Missing function or method docstring (missing-function-docstring)
-comments.py:10:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:5:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:11:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:16:0: C0116: Missing function or method docstring (missing-function-docstring)
 ************* Module config
 config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 config.py:1:0: C0103: Constant name "secret_key" doesn't conform to UPPER_CASE naming style (invalid-name)
@@ -43,21 +44,31 @@ db.py:38:0: C0116: Missing function or method docstring (missing-function-docstr
 db.py:47:0: C0116: Missing function or method docstring (missing-function-docstring)
 db.py:50:0: C0116: Missing function or method docstring (missing-function-docstring)
 db.py:50:0: W0102: Dangerous default value [] as argument (dangerous-default-value)
+************* Module pagination
+pagination.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+pagination.py:4:0: C0116: Missing function or method docstring (missing-function-docstring)
 ************* Module reviews
 reviews.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-reviews.py:3:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:8:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:17:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:17:0: R0913: Too many arguments (6/5) (too-many-arguments)
-reviews.py:17:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
-reviews.py:24:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:28:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:4:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:18:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:18:0: R0913: Too many arguments (6/5) (too-many-arguments)
+reviews.py:18:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+reviews.py:25:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:32:0: C0116: Missing function or method docstring (missing-function-docstring)
 reviews.py:43:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:43:0: R0913: Too many arguments (6/5) (too-many-arguments)
-reviews.py:43:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
 reviews.py:58:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:62:0: C0116: Missing function or method docstring (missing-function-docstring)
-reviews.py:74:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:58:0: R0913: Too many arguments (6/5) (too-many-arguments)
+reviews.py:58:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+reviews.py:73:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:77:0: C0116: Missing function or method docstring (missing-function-docstring)
+reviews.py:92:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module seed
+seed.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+seed.py:10:0: C0116: Missing function or method docstring (missing-function-docstring)
+seed.py:17:0: C0116: Missing function or method docstring (missing-function-docstring)
+seed.py:37:0: C0116: Missing function or method docstring (missing-function-docstring)
+seed.py:48:0: C0116: Missing function or method docstring (missing-function-docstring)
 ************* Module users
 users.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 users.py:5:0: C0116: Missing function or method docstring (missing-function-docstring)
@@ -71,7 +82,7 @@ validation.py:56:0: C0116: Missing function or method docstring (missing-functio
 validation.py:71:0: C0116: Missing function or method docstring (missing-function-docstring)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.16/10 (previous run: 8.00/10, +0.16)
+Your code has been rated at 8.28/10 (previous run: 8.00/10, +0.28)
 ```
 
 ## Docstring-ilmoitukset
@@ -80,7 +91,7 @@ Suurin osa ilmoituksista koskee moduulien ja funktioiden puuttuvia docstringejä
 
 ```text
 app.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-app.py:25:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:26:0: C0116: Missing function or method docstring (missing-function-docstring)
 ```
 
 Sovelluksessa on tietoisesti valittu tyyli, jossa moduuleihin ja funktioihin ei
@@ -127,10 +138,10 @@ käytetään näissä funktioissa vain lukemiseen.
 ## Parametrien määrä
 
 ```text
-reviews.py:17:0: R0913: Too many arguments (6/5) (too-many-arguments)
-reviews.py:17:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
-reviews.py:43:0: R0913: Too many arguments (6/5) (too-many-arguments)
-reviews.py:43:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+reviews.py:18:0: R0913: Too many arguments (6/5) (too-many-arguments)
+reviews.py:18:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+reviews.py:58:0: R0913: Too many arguments (6/5) (too-many-arguments)
+reviews.py:58:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
 ```
 
 Molemmat ilmoitustyypit koskevat samoja kahta funktiota:
